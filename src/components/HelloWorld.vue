@@ -28,13 +28,15 @@
       <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
     </ul>
   </div>
+  <button class="btn">My First Message: {{ message }}</button>
 </template>
 
 <script>
 export default {
   name: 'HelloWorld',
   props: {
-    msg: String
+    msg: String,
+    message: String,
   }
 }
 </script>
@@ -54,5 +56,10 @@ li {
 }
 a {
   color: #42b983;
+}
+
+.messageClass {
+  font-size: 32px;
+  font-weight: bold;
 }
 </style>
