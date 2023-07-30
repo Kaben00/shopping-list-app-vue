@@ -12,7 +12,11 @@ const newItems = ref("")
 const isHighPriority = ref(false)
 
 const saveItems = () => {
-  listItems.value.push({id: listItems.value.length + 1, label: newItems.value})
+  listItems.value.push(
+    {
+      id: listItems.value.length + 1, 
+      label: newItems.value
+    })
   newItems.value = ""
 }
 
@@ -56,15 +60,17 @@ const doEdit = (e) => {
     >High Priority
     <button
       class="btn btn-primary"
+      :disabled="newItems.length < 5"
     >
-    Safe Item</button>
+    Save Item</button>
   </form>
   <ul>
     <li
       v-for="{id, label} in listItems"
       :key="id"
     >
-  {{ label }}</li>
+    {{ label }}
+    </li>
   </ul>
   <p v-if="!listItems.length">Nothing added yet.</p>
 </template>
