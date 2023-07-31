@@ -1,11 +1,20 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
+const header = ref("Shopping List App")
 const listItems = ref([
-  // {id:1, label:"10 ice cream"},
-  // {id:2, label: "5 oranges"},
-  // {id:3, label: "3 sacks of patatoes"}
+  {id:1, label:"10 ice cream", isHighPrioritySelected: false, isStrikeOut: true},
+  {id:2, label: "5 oranges", isHighPrioritySelected: false, isStrikeOut: true},
+  {id:3, label: "3 sacks of patatoes", isHighPrioritySelected: true, isStrikeOut: false}
 ])
+
+const wordCount = computed(() => {
+  return newItems.value.length
+})
+
+const reversedItems = computed(() => {
+  return [...listItems.value].reverse()
+})
 
 const newItems = ref("")
 
@@ -15,9 +24,11 @@ const saveItems = () => {
   listItems.value.push(
     {
       id: listItems.value.length + 1, 
-      label: newItems.value
+      label: newItems.value,
+      isHighPrioritySelected: isHighPriority.value
     })
   newItems.value = ""
+  isHighPriority.value =""
 }
 
 const editing = ref()
@@ -25,13 +36,18 @@ const editing = ref()
 const doEdit = (e) => {
   editing.value = e
   newItems.value = ""
+  isHighPriority.value =""
 }
 
+
+const isToogle = (e) => {
+  e.isStrikeOut = !e.isStrikeOut
+}
 </script>
 
 <template>
   <div class="header">
-    <h1>Shopping List App</h1>
+    <h1>{{ header }}</h1>
     <button 
       class="btn" 
       v-if="editing" 
@@ -53,6 +69,9 @@ const doEdit = (e) => {
       type="text"
       placeholder="Add an item"
     >
+    <p class="counter">
+      {{ wordCount }} / 200
+    </p>
     <input
       type="checkbox"
       placeholder="high"
@@ -66,8 +85,13 @@ const doEdit = (e) => {
   </form>
   <ul>
     <li
-      v-for="{id, label} in listItems"
+      v-for="({id, label, isHighPrioritySelected, isStrikeOut}, index) in reversedItems"
+      :class="{
+        priority: isHighPrioritySelected, 
+        strikeout: isStrikeOut
+        }"
       :key="id"
+      @click="isToogle(listItems[index])"
     >
     {{ label }}
     </li>
